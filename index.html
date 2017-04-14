@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <style type="text/css">
+        #div1, #div2 {
+            width: 350px;
+            height: 200px;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #aaaaaa;
+        }
+
+        newTitle {
+            padding: 30px;
+            font-size: 30px;
+            width: 300px;
+            display: block;
+            background-color: chocolate;
+        }
+    </style>
+    <script>
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("Text", event.target.id);
+        }
+        function drop(event) {
+            event.preventDefault();
+            var data = event.dataTransfer.getData("Text");
+            event.target.appendChild(document.getElementById(data));
+        }
+        <!--html5添加的新元素-->
+        document.createElement("newTitle")
+    </script>
+</head>
+
+<body onload="getCurrentTime()">
+<h1>hello</h1>
+<div id="time"></div>
+<script>
+    function getCurrentTime() {
+        var date = new Date();
+        document.getElementById("time").innerHTML = "<h2>现在是:" + date.toLocaleDateString() + " " + date.toTimeString() + "</h2>";
+        setTimeout("getCurrentTime()", 1000);
+    }
+</script>
+<!--超链接-->
+<a href="http://www.baidu.com" target="_blank">this is a href</a>
+<p id="img" style="color:red">image show </p>
+<button onclick="getImage()" style="margin-bottom: 20px">点我</button>
+<!--表格-->
+<table border="1">
+    <tr>
+        <th>11</th>
+        <th>22</th>
+    </tr>
+    <tr>
+        <td>111,2222</td>
+        <td>2222,3333</td>
+    </tr>
+</table>
+<!--有序列表-->
+<ol type="I">
+    <li>Apple</li>
+    <li>Samsung</li>
+    <li>HuaWei</li>
+    <li>Nexus</li>
+</ol>
+<!--无序列表-->
+<ul style="list-style-type: square">
+    <li>Iphone 7Plus</li>
+    <li>Samsung S7</li>
+    <li>HuaWei Mate9</li>
+    <li>Nexus 6P</li>
+</ul>
+<!--自定义列表-->
+<dl>
+    <dt>Iphone</dt>
+    <dd>- Iphone 7Plus</dd>
+    <dd>- Iphone 7</dd>
+    <dd>- Iphone 6S Plus</dd>
+    <dt>Mate</dt>
+    <dd>- Mate 9</dd>
+    <dd>- Mate 8</dd>
+    <dd>- Mate 7</dd>
+</dl>
+<br>
+<!--表单-->
+<form action="">
+    用户名:<input title="1" type="text" name="user"><br>
+    密　码:<input title="2" type="text" name="secret" style="margin-top: 10px">
+</form>
+<br>
+<!--iframe框架-->
+<iframe src="time.html" name="frame"></iframe>
+<br>
+<a href="http://www.runoob.com" target="frame">菜鸟驿站</a>
+<br>
+<script>
+    document.write("<h1>这是一个脚本</h1>")
+</script>
+<noscript>
+    你的浏览器不支持script！
+</noscript>
+<newTitle>
+    html5添加新元素
+</newTitle>
+<br>
+<!--视频播放-->
+<video width="300" height="200" controls autoplay="autoplay">
+    <source src="1.mp4" type="video/mp4">
+</video>
+<article>
+    HTML5新元素article
+</article>
+<br>
+<canvas id="canvas" width="300" height="200" style="border: 1px solid #ff0000">
+    浏览器不支持canvas
+</canvas>
+<script>
+    var c = document.getElementById("canvas");
+    var cx = c.getContext("2d");
+    cx.beginPath();
+    cx.arc(100, 100, 50, 0, Math.PI * 2);
+    cx.stroke();
+    //    cx.fillStyle = "#00ff00";
+    //    cx.fillRect(0, 0, 200, 100);
+</script>
+<!--html5拖放-->
+<p>拖拽图片到矩形框中</p>
+<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <img id="drag1" src="look.png" draggable="true" ondragstart="drag(event)" width="192" height="192">
+</div>
+<div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+<br>
+<script>
+    var str = "this is a img";
+    function getImage() {
+        document.getElementById("img").innerHTML = str;
+    }
+</script>
+<!--定位服务-->
+<p id="pos">点击获取当前位置信息</p>
+<button onclick="getCurrentPosition()">点我</button>
+<div id="showMap"></div>
+<script>
+    var text = document.getElementById("pos");
+    function onSuccess(position) {
+        text.innerHTML = "纬度:" + position.coords.latitude + "<br>经度:" + position.coords.longitude;
+//        var latlon = position.coords.latitude + "," + position.coords.longitude;
+//
+//        var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="
+//            + latlon + "&zoom=14&size=400x300&sensor=false";
+//        var img1 = document.createElement("img");
+//        img1.src = "http://maps.googleapis.com/maps/api/staticmap?center="
+//            + latlon + "&zoom=14&size=400x300&sensor=false";
+//        document.getElementById("showMap").appendChild(img1);
+    }
+    function onError(error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                text.innerHTML = "用户拒绝对获取地理位置的请求";
+                break;
+            case error.POSITION_UNAVAILABLE:
+                text.innerHTML = "位置信息不可用";
+                break;
+            case error.TIMEOUT:
+                text.innerHTML = "请求用户地理位置超时";
+                break;
+            case error.UNKNOWN_ERR:
+                text.innerHTML = "未知的错误";
+                break;
+        }
+    }
+    function getCurrentPosition() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        } else {
+            text.innerHTML = "浏览器不支持定位服务";
+        }
+    }
+</script>
+<br>
+<!--html5表单-->
+<form action="time.html">
+    选择你喜欢的颜色:<input title="11" type="color" name="selectColor"><br>
+    <input title="22" type="submit" style="margin-top: 10px">
+</form>
+<br>
+<form action="time.html">
+    <input title="111" list="browsers" name="browser">
+    <datalist id="browsers">
+        <option>Apple</option>
+        <option>Google</option>
+        <option>Alibaba</option>
+        <option>Tencent</option>
+    </datalist>
+    <input title="222" type="submit">
+</form>
+<br>
+<form oninput="x.value=parseInt(a.value)+parseInt(b.value)">0
+    <input title="111" type="range" id="a" value="50">100+
+    <input title="222" type="number" id="b" value="50">=
+    <output name="x" for="a b"></output>
+</form>
+<br>
+<form action="time.html" autocomplete="on" target="_blank">
+    <input title="111" placeholder="user" type="text" name="fname" autofocus required><br>
+    <input title="111" placeholder="name" type="text" name="lname" required><br>
+    <input title="111" placeholder="email" type="email" autocomplete="off" required><br>
+    <input type="submit">
+</form>
+<br>
+<form>
+    选取文件:<input type="file" multiple>
+    <input type="submit">
+</form>
+<br>
+<button onclick="clickCount()">点我</button>
+<div id="result"></div>
+<p>点击该按钮查看计数器增加，数据保存没有时间限制</p>
+<script>
+    function clickCount() {
+        if (typeof(Storage) !== "undefined") {
+            if (localStorage.clickcount) {
+                localStorage.clickcount = Number(localStorage.clickcount) + 1;
+            } else {
+                localStorage.clickcount = 1;
+            }
+            document.getElementById("result").innerHTML = "在这个会话中你点击了这个按钮" + localStorage.clickcount + "次";
+        } else {
+            document.getElementById("result").innerHTML = "抱歉你的浏览器不支持localStorage";
+        }
+    }
+</script>
+<br>
+<button onclick="clickCountForSession()">点我</button>
+<div id="result1"></div>
+<p>点击该按钮查看计数器增加，数据在退出浏览器后销毁</p>
+<script>
+    function clickCountForSession() {
+        if (typeof(Storage) !== "undefined") {
+            if (sessionStorage.clickcount) {
+                sessionStorage.clickcount = Number(sessionStorage.clickcount) + 1;
+            } else {
+                sessionStorage.clickcount = 1;
+            }
+            document.getElementById("result1").innerHTML = "在这个会话中你点击了这个按钮" + sessionStorage.clickcount + "次";
+        } else {
+            document.getElementById("result1").innerHTML = "抱歉你的浏览器不支持sessionStorage";
+        }
+    }
+</script>
+<br>
+<p>Web Storage构建本地存储</p>
+<div style="border: 2px dashed #ccc;width: 320px;text-align: center">
+    <label for="siteName">网站名(key):</label>
+    <input type="text" id="siteName"><br>
+    <label for="siteUrl">网 址(value):</label>
+    <input type="text" id="siteUrl"><br>
+    <input type="button" onclick="save()" value="新增记录">
+    <hr>
+    <label for="search">输入网站名:</label>
+    <input type="text" id="search"><br>
+    <input type="button" onclick="find()" value="查找网站">
+    <input type="button" onclick="remove()" value="删除网站">
+    <br>
+    <p id="find_result"></p>
+</div>
+<br>
+<!--展现所有在存储中的数据-->
+<div id="list" onload="loadAll()"></div>
+<script>
+    //加载本地存储中所有数据
+    loadAll();
+
+    function loadAll() {
+        var list = document.getElementById("list");
+        if (localStorage.length > 0) {
+            var result = "<table border='1'>";
+            result += "<tr><td>网站名</td><td>网址</td></tr>";
+            for (var i = 0; i < localStorage.length; i++) {
+                var siteName = localStorage.key(i);
+                var siteUrl = localStorage.getItem(siteName);
+                result += "<tr><td>" + siteName + "</td><td>" + siteUrl + "</td></tr>";
+            }
+            result += "</table>";
+            list.innerHTML = result;
+        } else {
+            list.innerHTML = "数据为空……";
+        }
+    }
+    function save() {
+        var siteName = document.getElementById("siteName").value;
+        var siteUrl = document.getElementById("siteUrl").value;
+        localStorage.setItem(siteName, siteUrl);
+        alert("添加成功");
+        loadAll();
+    }
+    function find() {
+        var search = document.getElementById("search").value;
+        var result = localStorage.getItem(search);
+        document.getElementById("find_result").innerHTML = search + "的网址是:" + result;
+    }
+    function remove() {
+        var search = document.getElementById("search").value;
+        localStorage.removeItem(search);
+        document.getElementById("find_result").innerHTML = "成功删除数据,网站名为:" + search;
+        loadAll();
+    }
+</script>
+<p>html5获取服务端更新数据</p>
+<div id="server_result"></div>
+<script>
+    if (typeof (EventSource) !== "undefined") {
+        var source = new EventSource("demo_sse.php");
+        source.onmessage = function (event) {
+            document.getElementById("server_result").innerHTML += event.data + "<br>";
+        };
+    } else {
+        document.getElementById("server_result").innerHTML = "浏览器不支持server_sent事件";
+    }
+</script>
+</body>
+
+</html>
